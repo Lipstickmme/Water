@@ -1,34 +1,41 @@
 # Water Water
 
-A global water-safety and plastic-free free-water platform, built as a static website (no build step).
+Search any address, street, city or region and see what published research has found in its drinking water.
 
 ## Run it
 
-Open `index.html` in a browser, or serve the folder:
+Static site with no build step:
 
 ```sh
-python3 -m http.server 8000   # then visit http://localhost:8000
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Map tiles (OpenStreetMap) and place search (Nominatim) need an internet connection. Coordinate search (`51.50, -0.12`) works offline.
+Needs an internet connection for map tiles and place search.
 
-## Modules
+## How it works
 
-| # | Module | Where |
-|---|--------|-------|
-| 1 | Global water quality map: heat layer, street-level zoom, site-type filters, ZIP/city/coordinate search, "Data Pending: Not Yet Locally Sampled" status, and the nearest tested source by geodesic distance (Vincenty, WGS-84) | `js/map.js`, `js/geo.js` |
-| 2 | Toxicological database: guideline limits, acute and chronic effects, and a contaminant × body-system matrix | `js/data.js` (`CONTAMINANTS`) |
-| 3 | Scarcity and potability index: Critical Risk, Water Scarce, Safe Havens | `js/data.js` (`POTABILITY`) |
-| 4 | Remediation: RO, desalination, phytoremediation, rainwater harvesting, and a treatment recommender | `index.html`, `js/app.js` |
-| 5 | Packaging analysis: glass vs carton vs PET | `index.html` |
-| 6 | Free-water model: ad-revenue simulator, account-strength tiering, crowdfunded relief ledger | `js/app.js` |
+1. **`index.html`** is a minimal, Google-style search page. Suggestions appear as you type, from [Photon](https://photon.komoot.io), which is built on OpenStreetMap. There's also a "use my location" button.
+2. **`map.html`** zooms to the searched place and outlines its boundary (from [Nominatim](https://nominatim.org)). A collapsible panel lists every substance documented for that area:
+   - **In this area:** the place falls inside a documented contamination hotspot (`HOTSPOTS`).
+   - **Region / National:** findings for the state or country (`REGIONS`).
+   - **Global:** context that applies everywhere.
+3. Each finding cites its study or report and links to a web search for that exact source.
 
-## Data status
+## Files
 
-- **Sample points are demo data.** The locations are real places, but the readings are illustrative. Before launch, swap in live feeds. `js/sources.js` has a USGS/EPA Water Quality Portal adapter and a scoring function that turns readings into the 0–100 contamination index.
-- **The relief ledger is a demo.** Pledges are stored in `localStorage` and no payment is processed.
-- The economics assumptions (unit costs, impressions per post) are constants at the top of the simulator code in `js/app.js`.
+| File | Purpose |
+|------|---------|
+| `js/research.js` | Substances, hotspots, regional and national findings, with citations |
+| `js/results.js` | Map page: resolve the place, zoom, gather and render findings |
+| `js/searchbox.js` | Shared search box with type-ahead |
+| `js/geocode.js` | Photon (suggestions) and Nominatim (lookup / reverse) |
+| `js/learn.js` | Collapsible info panels: health, purification, packaging, free-water model |
+| `js/geo.js` | Geodesic distance (Vincenty, WGS-84) |
+| `js/sources.js` | Adapter for live USGS Water Quality Portal data (not wired in yet) |
+| `css/style.css` | Light-blue and white theme |
 
-## Third-party
+## Notes
 
-- [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2) and [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) 0.2.0 are vendored in `vendor/`.
+- Findings summarise published research at a regional or national scale. They are not a test of any one tap.
+- The public Photon and Nominatim servers are rate-limited. Self-host them or use a paid geocoder before launch.
+- Leaflet 1.9.4 (BSD-2) is vendored in `vendor/`.

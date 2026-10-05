@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Water Water — Map</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="mapview">
+  <div id="map" aria-label="Map"></div>
+
+  <header class="topbar">
+    <a href="index.html" class="logo small" aria-label="Water Water home"><span class="logo-word">Water</span><span class="logo-word alt">Water</span></a>
+    <form class="search" id="search" role="search" autocomplete="off">
+      <i class="s-icon" data-icon="search"></i>
+      <input type="search" name="q" placeholder="Search an address, street, city or region" aria-label="Search a place"
+             role="combobox" aria-autocomplete="list" aria-controls="suggestions">
+      <ul class="suggestions" id="suggestions" role="listbox" hidden></ul>
+    </form>
+  </header>
+
+  <aside class="panel" id="panel">
+    <button class="panel-toggle" id="panel-toggle" aria-expanded="true" aria-controls="panel-body">
+      <span class="grip"></span><span class="sr">Show or hide results</span>
+    </button>
+    <div class="panel-body" id="panel-body">
+      <div id="results" aria-live="polite"><p class="loading"><i data-icon="drop"></i> Finding your water…</p></div>
+      <div id="learn" class="learn-wrap compact"></div>
+      <p class="fine">Findings come from published studies and official reports for this area. They are not a test of your tap. For your exact supply, ask your water provider for its latest quality report or use a certified lab.</p>
+    </div>
+  </aside>
+
+  <div class="map-legend" id="legend"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/research.js"></script>
+  <script src="js/geo.js"></script>
+  <script src="js/geocode.js"></script>
+  <script src="js/searchbox.js"></script>
+  <script src="js/learn.js"></script>
+  <script src="js/results.js"></script>
+</body>
+</html>

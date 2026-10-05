@@ -4,253 +4,62 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Water Water</title>
-  <meta name="description" content="Global water safety map, contaminant health index, scarcity directory and a plastic-free, ad-supported free water network.">
-  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="description" content="Search any address, street or region to see what research has found in its drinking water.">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="#top" id="top"><span class="drop" aria-hidden="true"></span>Water Water</a>
-    <nav>
-      <a href="#map-section">Map</a>
-      <a href="#toxicology">Health Index</a>
-      <a href="#scarcity">Scarcity</a>
-      <a href="#remediation">Purification</a>
-      <a href="#packaging">Packaging</a>
-      <a href="#model">Free Water</a>
-      <a href="#relief">Relief</a>
-    </nav>
-  </header>
+<body class="home">
+  <main class="home-main">
+    <h1 class="logo" aria-label="Water Water">
+      <span class="logo-word">Water</span><span class="logo-word alt">Water</span>
+    </h1>
+    <svg class="wave" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 8 Q 15 0 30 8 T 60 8 T 90 8 T 120 8 T 150 8 T 180 8 T 210 8 T 240 8 T 270 8 T 300 8"/>
+    </svg>
+    <p class="tagline">What’s in the water where you live?</p>
 
-  <section class="hero">
-    <h1>Know your water. Drink it free. Never in plastic.</h1>
-    <p>A global map of water safety, a health index for every major contaminant, and an ad-supported network that gives clean water away in glass and paperboard.</p>
-  </section>
-
-  <!-- Module 1 -->
-  <section id="map-section" class="module">
-    <div class="module-head">
-      <span class="num">01</span>
-      <h2>Global Water Quality Map</h2>
-      <p>Zoom from continents to street level. Search a postal code, city, or coordinates to find the nearest tested source.</p>
-    </div>
-    <form id="search-form" class="search" role="search">
-      <input id="search-input" type="search" placeholder="ZIP / postal code, city, or 51.50, -0.12" aria-label="Search location" autocomplete="off">
-      <button type="submit">Check water</button>
+    <form class="search big" id="search" role="search" autocomplete="off">
+      <i class="s-icon" data-icon="search"></i>
+      <input type="search" name="q" placeholder="Search an address, street, city or region" aria-label="Search a place"
+             role="combobox" aria-autocomplete="list" aria-controls="suggestions" autofocus>
+      <button type="button" class="icon-btn" id="near-me" title="Use my location" aria-label="Use my location"><i data-icon="locate"></i></button>
+      <ul class="suggestions" id="suggestions" role="listbox" hidden></ul>
     </form>
-    <div id="search-result" class="search-result" hidden aria-live="polite"></div>
-    <div class="map-wrap">
-      <div id="map" aria-label="Water quality map"></div>
-      <aside class="map-controls">
-        <h3>Layers</h3>
-        <label><input id="heat-toggle" type="checkbox" checked> Contamination heat map</label>
-        <h3>Site types</h3>
-        <div id="type-filters" class="filters"></div>
-        <h3>Contamination index</h3>
-        <div id="legend" class="legend"></div>
-      </aside>
-    </div>
-    <p class="notice"><strong>Demo data.</strong> Sample points are at real locations but their readings are illustrative, not measurements. Live feeds (USGS Water Quality Portal, UNEP GEMS/Water) plug in through <code>js/sources.js</code>.</p>
-  </section>
 
-  <!-- Module 2 -->
-  <section id="toxicology" class="module">
-    <div class="module-head">
-      <span class="num">02</span>
-      <h2>Toxicological Database &amp; Health Index</h2>
-      <p>Every major contaminant mapped to the body systems it harms, its guideline limit, and what removes it.</p>
-    </div>
-    <div class="toolbar">
-      <label>Group <select id="tox-group"></select></label>
-      <label>Body system <select id="tox-system"></select></label>
-    </div>
-    <div id="tox-grid" class="tox-grid"></div>
-    <details class="matrix-wrap">
-      <summary>Show contaminant × body-system matrix</summary>
-      <div class="scroll-x"><table id="tox-matrix" class="matrix"></table></div>
-    </details>
-    <p class="notice">Health information is educational and summarises WHO and US EPA guidance. It is not medical advice.</p>
-  </section>
-
-  <!-- Module 3 -->
-  <section id="scarcity" class="module">
-    <div class="module-head">
-      <span class="num">03</span>
-      <h2>Global Scarcity &amp; Potability Index</h2>
-      <p>Regions grouped by whether their water is toxic, absent, or exceptionally pure.</p>
-    </div>
-    <div id="pot-tabs" class="tabs" role="tablist"></div>
-    <div id="pot-panel" class="pot-panel" role="tabpanel"></div>
-  </section>
-
-  <!-- Module 4 -->
-  <section id="remediation" class="module">
-    <div class="module-head">
-      <span class="num">04</span>
-      <h2>Remediation &amp; Desalination</h2>
-      <p>Purification matched to what is actually in the water.</p>
-    </div>
-    <div class="remedy-picker">
-      <label>My water contains <select id="remedy-contaminant"></select></label>
-      <p id="remedy-out"></p>
-    </div>
-    <div class="cards">
-      <article class="card">
-        <h3>Reverse Osmosis (RO)</h3>
-        <p>Pushes water through a semi-permeable membrane with ~0.0001 µm pores. Removes roughly 95–99% of dissolved solids, including lead, arsenic, cadmium, nitrate, fluoride and most PFAS.</p>
-        <p class="con"><strong>Drawback:</strong> point-of-use units reject 1–4 litres of brine per litre produced, and strip beneficial minerals (remineralise for long-term use).</p>
-      </article>
-      <article class="card">
-        <h3>Desalination for coastal zones</h3>
-        <table class="mini">
-          <tr><th></th><th>Thermal (MSF / MED)</th><th>Seawater RO (SWRO)</th></tr>
-          <tr><td>Energy</td><td>High — heat plus ~1.5–4 kWh/m³ electricity</td><td>~3–4 kWh/m³ with energy recovery</td></tr>
-          <tr><td>Best fit</td><td>Gulf states with cheap waste heat; very saline feed</td><td>Most new plants worldwide</td></tr>
-          <tr><td>Watch-outs</td><td>Scaling, high fuel cost</td><td>Membrane fouling, pre-treatment needs</td></tr>
-        </table>
-        <p class="con"><strong>Both</strong> produce hypersaline brine that must be diffused to protect marine life.</p>
-      </article>
-      <article class="card">
-        <h3>Eco-purifiers &amp; phytoremediation</h3>
-        <ul>
-          <li><strong>Vetiver grass</strong> — deep roots take up heavy metals and nitrates from wetlands and runoff channels.</li>
-          <li><strong>Water hyacinth</strong> — hyperaccumulates metals in constructed wetlands; invasive, so only in contained basins and harvest it.</li>
-          <li><strong>Moringa seed coagulation</strong> — crushed seed proteins bind suspended particles, cutting turbidity and 90–99% of bacteria. Follow with disinfection.</li>
-        </ul>
-        <p class="con">Phytoremediation cleans source water over seasons. It does not make water drinkable on its own.</p>
-      </article>
-      <article class="card">
-        <h3>Rainwater &amp; atmospheric harvesting</h3>
-        <ul>
-          <li>Divert the first 1–2 mm of each storm (first-flush) to drop roof debris.</li>
-          <li>Store in opaque, sealed, food-grade tanks with screened inlets.</li>
-          <li>Filter to ≤5 µm, then UV at ≥40 mJ/cm² (NSF/ANSI 55 Class A) or chlorinate.</li>
-          <li>Fog nets and atmospheric generators suit arid coasts; disinfect their output the same way.</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <!-- Module 5 -->
-  <section id="packaging" class="module">
-    <div class="module-head">
-      <span class="num">05</span>
-      <h2>Packaging Analysis</h2>
-      <p>Why Water Water ships only in glass and paperboard.</p>
-    </div>
-    <div class="scroll-x">
-      <table class="compare">
-        <thead><tr><th>Material</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><strong>Glass</strong></td>
-            <td>Infinitely recyclable; chemically inert; no microplastic or BPA leaching; refillable 20–50 times; premium print surface.</td>
-            <td>Heavy, so transport emissions are high on single trips; fragile.</td>
-            <td><span class="verdict yes">Used for local, refillable loops</span></td>
-          </tr>
-          <tr>
-            <td><strong>Aseptic carton</strong></td>
-            <td>~70–75% paperboard; light, so low transport emissions; blocks light and air; ships flat.</td>
-            <td>Thin polyethylene and aluminium layers need specialist recycling facilities to separate.</td>
-            <td><span class="verdict yes">Used for long-haul &amp; relief</span></td>
-          </tr>
-          <tr class="excluded">
-            <td><strong>Single-use plastic (PET)</strong></td>
-            <td>Light, cheap, shatterproof.</td>
-            <td>Sheds micro- and nanoplastics into water; persists for centuries; true bottle-to-bottle recycling rates are low.</td>
-            <td><span class="verdict no">Strictly excluded</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Module 6 -->
-  <section id="model" class="module">
-    <div class="module-head">
-      <span class="num">06</span>
-      <h2>The Water Water Free-Water Model</h2>
-      <p>Water is free to drink. Advertisers pay for the bottle. Drinkers pay with a post.</p>
+    <div class="home-actions">
+      <button form="search" type="submit" class="btn">Check my water</button>
+      <a class="btn ghost" href="map.html?q=World&amp;view=world">Explore the map</a>
     </div>
 
-    <div class="loop">
-      <div class="step"><b>1</b>Sponsor buys print space on glass bottles and cartons</div>
-      <div class="step"><b>2</b>Water is filled and distributed free</div>
-      <div class="step"><b>3</b>Drinker scans the QR code on the empty container</div>
-      <div class="step"><b>4</b>Shares a water-awareness post</div>
-      <div class="step"><b>5</b>Account strength checked → voucher for a free 6-pack</div>
+    <div class="try">Try:
+      <a href="map.html?q=Flint%2C%20Michigan">Flint, Michigan</a>
+      <a href="map.html?q=Dhaka%2C%20Bangladesh">Dhaka</a>
+      <a href="map.html?q=Nakuru%2C%20Kenya">Nakuru</a>
+      <a href="map.html?q=Wilmington%2C%20North%20Carolina">Wilmington, NC</a>
     </div>
 
-    <h3 class="sub">Concept Explorer — ad-revenue formula</h3>
-    <div class="sim">
-      <form class="sim-inputs" onsubmit="return false">
-        <label>Active users / day <output for="eco-users"></output><input id="eco-users" type="range" min="1000" max="1000000" step="1000" value="50000"></label>
-        <label>6-packs per user / day <output for="eco-packs"></output><input id="eco-packs" type="range" min="1" max="3" step="1" value="1"></label>
-        <label>Packaging
-          <select id="eco-pack"><option value="carton">Paperboard carton</option><option value="glass">Glass bottle</option></select></label>
-        <label id="eco-return-wrap" hidden>Glass return &amp; refill rate <output for="eco-return"></output><input id="eco-return" type="range" min="0" max="95" value="60" data-fmt="pct"></label>
-        <label>Water + filling / unit <output for="eco-water"></output><input id="eco-water" type="range" min="0.01" max="0.15" step="0.005" value="0.04" data-fmt="money"></label>
-        <label>Logistics / unit <output for="eco-logistics"></output><input id="eco-logistics" type="range" min="0.02" max="0.40" step="0.01" value="0.10" data-fmt="money"></label>
-        <label>Sponsor fee / printed unit <output for="eco-fee"></output><input id="eco-fee" type="range" min="0.05" max="1.00" step="0.01" value="0.30" data-fmt="money"></label>
-        <label>Ad sell-through <output for="eco-sell"></output><input id="eco-sell" type="range" min="10" max="100" value="80" data-fmt="pct"></label>
-        <label>Users who post / day <output for="eco-posts"></output><input id="eco-posts" type="range" min="0" max="100" value="70" data-fmt="pct"></label>
-        <label>Social CPM sold to sponsors <output for="eco-cpm"></output><input id="eco-cpm" type="range" min="0" max="20" step="0.5" value="3" data-fmt="money"></label>
-      </form>
-      <div>
-        <div id="eco-results" class="kpis"></div>
-        <p id="eco-formula" class="formula"></p>
-        <p class="muted small">Assumptions: carton $0.14, glass $0.38 per unit incl. printing; refill wash $0.09; ~150 impressions per verification post. Adjust in <code>js/app.js</code>.</p>
-      </div>
-    </div>
+    <section class="learn-wrap" id="learn" aria-label="Learn more"></section>
+  </main>
 
-    <h3 class="sub">Concept Explorer — account strength &amp; anti-fraud tiering</h3>
-    <div class="sim">
-      <form class="sim-inputs" onsubmit="return false">
-        <label>Account age (days) <output for="acc-age"></output><input id="acc-age" type="range" min="0" max="730" value="120"></label>
-        <label>Followers <output for="acc-followers"></output><input id="acc-followers" type="range" min="0" max="20000" step="50" value="600"></label>
-        <label>Engagement rate <output for="acc-engagement"></output><input id="acc-engagement" type="range" min="0" max="10" step="0.1" value="3"></label>
-        <label>Past verified redemptions <output for="acc-redemptions"></output><input id="acc-redemptions" type="range" min="0" max="60" value="8"></label>
-        <label>Fraud flags <output for="acc-flags"></output><input id="acc-flags" type="range" min="0" max="5" value="0"></label>
-        <label class="check"><input id="acc-phone" type="checkbox" checked> Phone verified</label>
-        <label class="check"><input id="acc-email" type="checkbox" checked> Email verified</label>
-        <label class="check"><input id="acc-burst" type="checkbox"> Burst posting / bot-like pattern</label>
-      </form>
-      <div id="acc-out" class="acc-out"></div>
-    </div>
-    <p class="notice">Compliance: incentivised posts must carry a clear disclosure (e.g. #ad / “I got free water for this post”) under FTC, ASA and similar rules, and must respect each social platform's terms. Collect only the minimum profile data needed for fraud scoring.</p>
-  </section>
-
-  <section id="relief" class="module">
-    <div class="module-head">
-      <span class="num">07</span>
-      <h2>Crowdfunded Global Relief</h2>
-      <p>An open ledger of communities in acute water crisis. Fund paperboard-carton shipments directly.</p>
-    </div>
-    <div class="scroll-x">
-      <table class="ledger">
-        <thead><tr><th>Community</th><th>People</th><th>Funding progress</th><th>Your pledges</th></tr></thead>
-        <tbody id="ledger-body"></tbody>
-      </table>
-    </div>
-    <form id="donate-form" class="donate">
-      <label>Fund <select id="donate-target"></select></label>
-      <label>Amount (USD) <input id="donate-amount" type="number" min="1" step="1" value="25"></label>
-      <button type="submit">Pledge</button>
-      <p id="donate-preview" class="muted"></p>
-    </form>
-    <p class="notice"><strong>Demo ledger.</strong> Communities and totals are illustrative. Pledges are saved only in this browser and no payment is processed.</p>
-  </section>
-
-  <footer class="site-footer">
-    <p>© <span id="year"></span> Water Water. Map tiles © OpenStreetMap contributors. Guideline values: WHO GDWQ, US EPA.</p>
+  <footer class="foot">
+    Based on published research, not a test of your tap · Map data © OpenStreetMap contributors
   </footer>
 
-  <script src="vendor/leaflet/leaflet.js"></script>
-  <script src="vendor/leaflet-heat.js"></script>
-  <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/research.js"></script>
   <script src="js/geo.js"></script>
-  <script src="js/sources.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/geocode.js"></script>
+  <script src="js/searchbox.js"></script>
+  <script src="js/learn.js"></script>
+  <script>
+    hydrateIcons();
+    attachSearch(document.getElementById('search'));
+    renderLearn(document.getElementById('learn'));
+    document.getElementById('near-me').addEventListener('click', () => {
+      if (!navigator.geolocation) return alert('Location is not available in this browser.');
+      navigator.geolocation.getCurrentPosition(
+        p => { window.location.href = resultsUrl({ q: `${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}` }); },
+        () => alert('Could not get your location. Type an address instead.'));
+    });
+  </script>
 </body>
 </html>
