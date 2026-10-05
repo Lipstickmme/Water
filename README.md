@@ -14,7 +14,7 @@ Needs an internet connection for map tiles and place search.
 
 ## Basemap API key
 
-Open `js/config.js` and paste your raster (PNG) tile key into `apiKey`. It's added to the tile URL as the `key` parameter, which removes the "API key required" watermark. If your provider's URL isn't the MapTiler default, change `tileUrl` too and keep `{key}` where the key goes. Restrict the key to your domain in the provider's dashboard, because visitors can see browser keys. With no key set, the map uses CARTO's keyless tiles.
+Open `js/config.js` and paste your raster (PNG) tile key into `apiKey`. It's added to the tile URL as the `key` parameter, which removes the "API key required" watermark. The site is set up for CARTO's Voyager raster tiles. To use another provider, change `tileUrl` too and keep `{key}` where the key goes. Restrict the key to your domain in the provider's dashboard, because visitors can see browser keys. With no key set, the map uses CARTO's keyless tiles.
 
 ## How it works
 
