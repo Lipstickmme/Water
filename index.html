@@ -5,9 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Water Water</title>
   <meta name="description" content="Search any address, street or region to see what research has found in its drinking water.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="home">
+  <div class="water-bg" aria-hidden="true">
+    <div class="light light-a"></div>
+    <div class="light light-b"></div>
+    <svg class="waves" viewBox="0 24 150 28" preserveAspectRatio="none">
+      <defs><path id="wave" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18v44h-352z"/></defs>
+      <g class="parallax">
+        <use href="#wave" x="48" y="0"/>
+        <use href="#wave" x="48" y="3"/>
+        <use href="#wave" x="48" y="5"/>
+        <use href="#wave" x="48" y="7"/>
+      </g>
+    </svg>
+  </div>
   <main class="home-main">
     <h1 class="logo" aria-label="Water Water">
       <span class="logo-word">Water</span><span class="logo-word alt">Water</span>

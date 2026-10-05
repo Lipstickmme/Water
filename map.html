@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Water Water — Map</title>
+  <title>Water Water — Report</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -20,26 +21,37 @@
     </form>
   </header>
 
+  <div class="compare-bar" id="compare-bar" hidden></div>
+
   <aside class="panel" id="panel">
     <button class="panel-toggle" id="panel-toggle" aria-expanded="true" aria-controls="panel-body">
-      <span class="grip"></span><span class="sr">Show or hide results</span>
+      <span class="grip"></span><span class="sr">Show or hide report</span>
     </button>
     <div class="panel-body" id="panel-body">
-      <div id="results" aria-live="polite"><p class="loading"><i data-icon="drop"></i> Finding your water…</p></div>
-      <div id="learn" class="learn-wrap compact"></div>
-      <p class="fine">Findings come from published studies and official reports for this area. They are not a test of your tap. For your exact supply, ask your water provider for its latest quality report or use a certified lab.</p>
+      <div id="report-head"><p class="loading"><i data-icon="drop"></i> Preparing report…</p></div>
+      <nav class="tabs" id="tabs" role="tablist" hidden>
+        <button role="tab" aria-selected="true" data-tab="findings">Findings</button>
+        <button role="tab" aria-selected="false" data-tab="impact">Health impact</button>
+        <button role="tab" aria-selected="false" data-tab="sources">Sources</button>
+      </nav>
+      <section id="tab-findings" role="tabpanel"></section>
+      <section id="tab-impact" role="tabpanel" hidden></section>
+      <section id="tab-sources" role="tabpanel" hidden></section>
+      <p class="fine disclaimer">Compiled from published studies and official reports for this area. Not a test of your tap — for your exact supply, request your provider’s latest water quality report or use a certified laboratory.</p>
     </div>
   </aside>
 
   <div class="map-legend" id="legend"></div>
 
   <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/research.js"></script>
   <script src="js/geo.js"></script>
   <script src="js/geocode.js"></script>
   <script src="js/searchbox.js"></script>
-  <script src="js/learn.js"></script>
+  <script src="data/countries.js"></script>
+  <script src="js/charts.js"></script>
   <script src="js/results.js"></script>
 </body>
 </html>
